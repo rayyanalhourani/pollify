@@ -1,6 +1,6 @@
 <?php
-view("partials/nav.view.php");
 view("partials/header.view.php");
+view("partials/nav.view.php");
 view("partials/banner.view.php");
 ?>
 
