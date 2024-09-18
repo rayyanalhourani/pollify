@@ -1,6 +1,6 @@
 <?php
-view("partials/header.view.php");
-view("partials/nav.view.php");
+require "../views/partials/header.view.php";
+require "../views/partials/nav.view.php";
 ?>
 
 <main>
@@ -51,4 +51,4 @@ view("partials/nav.view.php");
     </div>
 
 </main>
-<?php view("partials/footer.view.php"); ?>
+<?php require "../views/partials/footer.view.php"; ?>

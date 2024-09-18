@@ -1,3 +1,5 @@
 <?php
 
-view("auth/login.view.php");
+view("auth/login.view.php",[
+    "title"=>"Login"
+]);
