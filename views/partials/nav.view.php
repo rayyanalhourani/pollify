@@ -9,13 +9,16 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <a href="/" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Home</a>
+                        <a href="/"
+                            class="rounded-md px-3 py-2 text-sm font-medium <?= urlIs("/") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Home</a>
                         <a href="#"
-                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Voting</a>
-                        <a href="#"
-                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">About</a>
-                        <a href="#"
-                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Contact</a>
+                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/voting") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Voting</a>
+                        <a href="/polls"
+                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/polls") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Polls</a>
+                        <a href="/about"
+                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/about") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">About</a>
+                        <a href="/contact"
+                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/contact") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Contact</a>
                     </div>
                 </div>
             </div>
@@ -48,7 +51,7 @@
                             </div>
                         </div>
                     <?php endif; ?>
-                    
+
                     <div class="mt-1 px-2 flex items-center">
 
                         <?php if ($_SESSION['user']["email"]): ?>
