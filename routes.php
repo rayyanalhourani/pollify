@@ -13,3 +13,5 @@ $router->post('/logout','auth/logout/store.php')->only("auth");
 
 //polls
 $router->get('/polls', 'polls/index.php')->only("auth");
+$router->get('/polls/create', 'polls/create.php')->only("auth");
+$router->post('/polls/create', 'polls/store.php')->only("auth");

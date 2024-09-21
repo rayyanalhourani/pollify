@@ -24,7 +24,7 @@
             </div>
             <div class="hidden md:block">
                 <div class="ml-4 flex items-center md:ml-6">
-                    <?php if ($_SESSION['user']["email"]): ?>
+                    <?php if (isset($_SESSION['user']["email"])): ?>
                         <button type="button"
                             class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span class="absolute -inset-1.5"></span>
@@ -54,7 +54,7 @@
 
                     <div class="mt-1 px-2 flex items-center">
 
-                        <?php if ($_SESSION['user']["email"]): ?>
+                        <?php if (isset($_SESSION['user']["email"])): ?>
                             <form action="/logout" method="post"><button
                                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign
                                     out</button></form>
