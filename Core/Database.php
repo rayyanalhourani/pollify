@@ -24,6 +24,10 @@ class Database
 
         $this->statement->execute($params);
 
+        if (strpos($query, 'INSERT') === 0) {
+            return $this->connection->lastInsertId();
+        }
+
         return $this;
     }
 

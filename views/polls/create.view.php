@@ -4,11 +4,11 @@ require "../views/partials/nav.view.php";
 ?>
 
 <main>
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="flex min-h-full flex-col justify-center px-6 py-6 lg:px-8">
         <h2 class=" text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create new poll
     </div>
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <form class="space-y-6" action="/polls/create" method="POST">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm pb-10">
+        <form class="space-y-5 " action="/polls/create" method="POST">
             <div>
                 <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Title</label>
                 <div class="mt-2">
@@ -24,14 +24,16 @@ require "../views/partials/nav.view.php";
                     name="description"
                     class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 placeholder:text-sm focus:ring-2 focus:ring-inset focus:ring-indigo-600"
                     rows="4"
-                    placeholder="Enter the description..."></textarea>
+                    placeholder="Enter the description..."
+                    require></textarea>
+                <div class="text-red-500 text-sm"><?= $errors["title"] ?? "" ?></div>
             </div>
             <div>
                 <div class="flex items-center justify-between">
                     <label for="startTime" class="block text-sm font-medium leading-6 text-gray-900">Start time</label>
                 </div>
                 <div class="mt-2">
-                    <input id="startTime" name="startTime" type="datetime-local"
+                    <input id="startTime" name="startTime" type="datetime-local" require
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
                 <div class="text-red-500 text-sm"><?= $errors["startTime"] ?? "" ?></div>
@@ -41,7 +43,7 @@ require "../views/partials/nav.view.php";
                     <label for="endTime" class="block text-sm font-medium leading-6 text-gray-900">End time</label>
                 </div>
                 <div class="mt-2">
-                    <input id="endTime" name="endTime" type="datetime-local"
+                    <input id="endTime" name="endTime" type="datetime-local" require
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
                 <div class="text-red-500 text-sm"><?= $errors["endTime"] ?? "" ?></div>
@@ -52,6 +54,7 @@ require "../views/partials/nav.view.php";
                     <h1 class="text-lg">Options</h1>
                     <button type="button" onclick="addOption()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2">Add Option</button>
                 </div>
+                <div class="text-red-500 text-sm"><?= $errors["options"] ?? "" ?></div>
 
                 <div id="options">
 
@@ -72,7 +75,7 @@ require "../views/partials/nav.view.php";
     function addOption() {
 
         let option = `<div class="mt-2 flex justify-between items-center" id="option_${numOfOptions}">
-                        <input name="options[]" type="text" required
+                        <input name="options[]" type="text" 
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
 
                         <svg class="w-6 h-6 text-red-800 cursor-pointer" onclick="deleteOption(${numOfOptions})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -81,12 +84,14 @@ require "../views/partials/nav.view.php";
                     </div>`
 
         numOfOptions++
-        document.getElementById("options").innerHTML += option
+        
+        let temp = document.createElement('div');
+        temp.innerHTML = option
+        document.getElementById("options").appendChild(temp)
     }
 
     function deleteOption(id) {
-        document.getElementById("option_"+id).remove();
+        document.getElementById("option_" + id).remove();
     }
-    
 </script>
 <?php require "../views/partials/footer.view.php"; ?>
