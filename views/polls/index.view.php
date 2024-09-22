@@ -4,12 +4,12 @@ view("partials/nav.view.php");
 ?>
 
 <main>
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <div class="mx-auto px-20 py-6">
         <div class="pb-4 bg-white p-3 flex justify-between	items-center">
             <div class="relative mt-1 ">
                 <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 20 20">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                     </svg>
@@ -41,43 +41,61 @@ view("partials/nav.view.php");
                             end_time
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Edit
+                            number of options
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Delete
+                            owner
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Actions
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr
-                        class="bg-white border-b hover:bg-gray-50">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            poll
-                        </th>
-                        <td class="px-6 py-4">
-                            poll 1
-                        </td>
-                        <td class="px-6 py-4">
-                            1-1-2024 12:30pm
-                        </td>
-                        <td class="px-6 py-4">
-                            1-1-2024 5:30pm
-                        </td>
-                        <td class="px-6 py-4">
-                            <a href="/polls/edit/1" class="font-medium text-blue-600 hover:underline">Edit</a>
-                        </td>
-                        <td class="px-6 py-4">
-                            <form action="/polls" method="POST">
-                                <input type="hidden" name="_method" value="delete">
-                                <input type="hidden" name="id" value="1">
-                                <button class="font-medium text-red-600 hover:underline">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
+                <tbody id="pollsTable">
+                    <?php foreach ($polls as $poll) : ?>
+                        <tr class="bg-white border-b hover:bg-gray-50" id="poll_<?= $poll["id"] ?>">
+                            <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <?= htmlspecialchars($poll["title"]); ?>
+                            </th>
+                            <td class="px-6 py-4">
+                                <?= htmlspecialchars($poll["description"]); ?>
+                            </td>
+                            <td class="px-6 py-4">
+                                <?= htmlspecialchars($poll["start_time"]); ?>
+                            </td>
+                            <td class="px-6 py-4">
+                                <?= htmlspecialchars($poll["end_time"]); ?>
+                            </td>
+                            <td class="px-6 py-4">
+                                <?= htmlspecialchars($poll["option_count"]); ?>
+                            </td>
+                            <td class="px-6 py-4">
+                                <?= htmlspecialchars($poll["owner"]); ?>
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="/polls/edit/<?= $poll["id"] ?>" class="font-medium text-blue-600 hover:underline">Edit</a>
+                                <button onclick="deleteRow(<?= $poll['id'] ?>)" class="font-medium text-red-600 hover:underline">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
                 </tbody>
             </table>
         </div>
     </div>
 </main>
 
+<script>
+    async function deleteRow(id) {
+        var formData = new FormData();
+        formData.append('_method', 'DELETE');
+        formData.append('id', id);
+
+        await fetch("/polls", {
+            method: "POST",
+            body: formData,
+        }).then(data => {
+            document.getElementById("poll_" + id).remove()
+        }).catch(error => console.error('Error:', error));
+    }
+</script>
 <?php view("partials/footer.view.php"); ?>
