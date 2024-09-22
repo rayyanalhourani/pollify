@@ -1,14 +1,16 @@
 <?php
 
-use Core\App;
-use Core\Database;
-use Core\Validator;
+use \Core\App;
+use \Core\Database;
+use \Core\Validator;
 
+$id = $_POST["id"];
 $title = $_POST["title"];
 $description = $_POST["description"];
 $start_time = $_POST["start_time"];
 $end_time = $_POST["end_time"];
-$options = $_POST["options"] ?? [];
+
+$set = [$id, $title, $description, $start_time, $end_time];
 
 $errors = [];
 if (!Validator::string($title, 5, 100)) {
@@ -29,37 +31,28 @@ if ($end_time == null) {
     $errors['end_time'] = "The end time should be greater than start time";
 }
 
-if (empty($options) or in_array("", $options)) {
-    $errors['options'] = "The options shouldn't be empty";
-}
-
 if (!empty($errors)) {
-    return view("polls/create.view.php", [
-        "title" => "Create poll",
-        "errors" => $errors
+    $db = App::resolve(Database::class);
+    $poll = $db->query("SELECT * from polls where id=:id", ["id" => $id])->findOrFail();
+    $options = $db->query("SELECT * from options where poll_id=:id", ["id" => $id])->get();
+    return view("polls/edit.view.php", [
+        "title" => "Edit poll",
+        "errors" => $errors,
+        "poll" => $poll,
+        "options" => $options
     ]);
 }
 
-$pollQuery = "INSERT INTO polls (title, description, start_time, end_time, created_by)
-             VALUES (:title,:description,:start_time,:end_time,:created_by);";
-
 $db = App::resolve(Database::class);
-$pollId = $db->query($pollQuery, [
+
+$updateQuery = "UPDATE polls SET title = :title, description = :description , start_time = :start_time, end_time = :end_time WHERE id = :id;";
+
+$db->query($updateQuery, [
     "title" => $title,
     "description" => $description,
     "start_time" => $start_time,
     "end_time" => $end_time,
-    "created_by" => $_SESSION['user']['id']
+    "id" => $id
 ]);
-
-$optionQuery = "INSERT INTO options (poll_id, option_text) 
-                VALUES (:poll_id, :option_text);";
-
-foreach ($options as $option) {
-    $db->query($optionQuery, [
-        "poll_id" => $pollId,
-        "option_text" => $option
-    ]);
-}
 
 redirect("/polls");

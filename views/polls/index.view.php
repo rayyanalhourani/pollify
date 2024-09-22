@@ -14,7 +14,7 @@ view("partials/nav.view.php");
                             d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                     </svg>
                 </div>
-                <input type="text" id="table-search"
+                <input type="text" id="table-search" onkeyup="searchFilter()"
                     class="block ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 h-10"
                     placeholder="Search for items">
             </div>
@@ -54,9 +54,9 @@ view("partials/nav.view.php");
                 <tbody id="pollsTable">
                     <?php foreach ($polls as $poll) : ?>
                         <tr class="bg-white border-b hover:bg-gray-50" id="poll_<?= $poll["id"] ?>">
-                            <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 <?= htmlspecialchars($poll["title"]); ?>
-                            </th>
+                            </td>
                             <td class="px-6 py-4">
                                 <?= htmlspecialchars($poll["description"]); ?>
                             </td>
@@ -73,7 +73,7 @@ view("partials/nav.view.php");
                                 <?= htmlspecialchars($poll["owner"]); ?>
                             </td>
                             <td class="px-6 py-4">
-                                <a href="/polls/edit/<?= $poll["id"] ?>" class="font-medium text-blue-600 hover:underline">Edit</a>
+                                <a href="/polls/edit?id=<?= $poll["id"] ?>" class="font-medium text-blue-600 hover:underline">Edit</a>
                                 <button onclick="deleteRow(<?= $poll['id'] ?>)" class="font-medium text-red-600 hover:underline">Delete</button>
                             </td>
                         </tr>
@@ -96,6 +96,28 @@ view("partials/nav.view.php");
         }).then(data => {
             document.getElementById("poll_" + id).remove()
         }).catch(error => console.error('Error:', error));
+    }
+
+    function searchFilter() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("table-search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("pollsTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
     }
 </script>
 <?php view("partials/footer.view.php"); ?>
