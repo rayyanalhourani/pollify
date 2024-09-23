@@ -9,8 +9,10 @@ $title = $_POST["title"];
 $description = $_POST["description"];
 $start_time = $_POST["start_time"];
 $end_time = $_POST["end_time"];
-
-$set = [$id, $title, $description, $start_time, $end_time];
+$options = $_POST["options"] ?? [];
+$deleted = $_POST["deleted"] ?? [];
+$added = $_POST["added"] ?? [];
+$edited = $_POST["edited"] ?? [];
 
 $errors = [];
 if (!Validator::string($title, 5, 100)) {
@@ -31,6 +33,10 @@ if ($end_time == null) {
     $errors['end_time'] = "The end time should be greater than start time";
 }
 
+if (empty($options) or in_array("", $options)) {
+    $errors['options'] = "The options shouldn't be empty";
+}
+
 if (!empty($errors)) {
     $db = App::resolve(Database::class);
     $poll = $db->query("SELECT * from polls where id=:id", ["id" => $id])->findOrFail();
@@ -45,8 +51,8 @@ if (!empty($errors)) {
 
 $db = App::resolve(Database::class);
 
+//update poll
 $updateQuery = "UPDATE polls SET title = :title, description = :description , start_time = :start_time, end_time = :end_time WHERE id = :id;";
-
 $db->query($updateQuery, [
     "title" => $title,
     "description" => $description,
@@ -54,5 +60,31 @@ $db->query($updateQuery, [
     "end_time" => $end_time,
     "id" => $id
 ]);
+
+//add options
+$addQuery = "INSERT INTO options (poll_id, option_text) VALUES (:poll_id, :option_text);";
+foreach($added as $index){
+    $db->query($addQuery, [
+        "poll_id" => $id,
+        "option_text" => $options[$index]
+    ]);
+}
+
+//edit options
+$editQuery = "UPDATE options SET option_text = :option_text WHERE id = :id;";
+foreach($edited as $index){
+    $db->query($editQuery, [
+        "id" => $index,
+        "option_text" => $options[$index]
+    ]);
+}
+
+//delete options
+$editQuery = "DELETE FROM options WHERE id = :id;";
+foreach($deleted as $index){
+    $db->query($editQuery, [
+        "id" => $index,
+    ]);
+}
 
 redirect("/polls");
