@@ -18,3 +18,4 @@ $router->get('/polls/edit', 'polls/edit.php')->only("auth");
 $router->post('/polls/create', 'polls/store.php')->only("auth");
 $router->put('/polls/update', 'polls/update.php')->only("auth");
 $router->delete('/polls', 'polls/delete.php')->only("auth");
+$router->get('/polls/show', 'polls/show.php')->only("auth");

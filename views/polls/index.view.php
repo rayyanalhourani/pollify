@@ -72,7 +72,8 @@ view("partials/nav.view.php");
                             <td class="px-6 py-4">
                                 <?= htmlspecialchars($poll["owner"]); ?>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 space-x-2">
+                            <a href="/polls/show?id=<?= $poll["id"] ?>" class="text-md font-medium text-green-600 hover:underline">Show</a>
                                 <a href="/polls/edit?id=<?= $poll["id"] ?>" class="font-medium text-blue-600 hover:underline">Edit</a>
                                 <button onclick="deleteRow(<?= $poll['id'] ?>)" class="font-medium text-red-600 hover:underline">Delete</button>
                             </td>
