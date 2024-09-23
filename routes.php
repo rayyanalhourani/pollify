@@ -22,3 +22,5 @@ $router->get('/polls/show', 'polls/show.php')->only("auth");
 
 //voting
 $router->get('/voting', 'voting/index.php')->only("auth");
+$router->get('/voting/vote', 'voting/show.php')->only("auth");
+$router->post('/voting/vote', 'voting/store.php')->only("auth");
