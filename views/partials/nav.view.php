@@ -11,7 +11,7 @@
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                         <a href="/"
                             class="rounded-md px-3 py-2 text-sm font-medium <?= urlIs("/") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Home</a>
-                        <a href="#"
+                        <a href="/voting"
                             class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/voting") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Voting</a>
                         <a href="/polls"
                             class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/polls") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Polls</a>
