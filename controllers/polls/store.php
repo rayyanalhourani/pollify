@@ -40,10 +40,10 @@ if (!empty($errors)) {
     ]);
 }
 
+$db = App::resolve(Database::class);
+
 $pollQuery = "INSERT INTO polls (title, description, start_time, end_time, created_by)
              VALUES (:title,:description,:start_time,:end_time,:created_by);";
-
-$db = App::resolve(Database::class);
 $pollId = $db->query($pollQuery, [
     "title" => $title,
     "description" => $description,
@@ -54,7 +54,6 @@ $pollId = $db->query($pollQuery, [
 
 $optionQuery = "INSERT INTO options (poll_id, option_text) 
                 VALUES (:poll_id, :option_text);";
-
 foreach ($options as $option) {
     $db->query($optionQuery, [
         "poll_id" => $pollId,

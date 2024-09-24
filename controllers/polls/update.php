@@ -10,9 +10,9 @@ $description = $_POST["description"];
 $start_time = $_POST["start_time"];
 $end_time = $_POST["end_time"];
 $options = $_POST["options"] ?? [];
-$deleted = $_POST["deleted"] ?? [];
-$added = $_POST["added"] ?? [];
-$edited = $_POST["edited"] ?? [];
+$deletedOptions = $_POST["deleted"] ?? [];
+$addedOptions = $_POST["added"] ?? [];
+$editedOptions = $_POST["edited"] ?? [];
 
 $errors = [];
 if (!Validator::string($title, 5, 100)) {
@@ -52,7 +52,13 @@ if (!empty($errors)) {
 $db = App::resolve(Database::class);
 
 //update poll
-$updateQuery = "UPDATE polls SET title = :title, description = :description , start_time = :start_time, end_time = :end_time WHERE id = :id;";
+$updateQuery = "UPDATE polls SET 
+    title = :title, 
+    description = :description,
+    start_time = :start_time,
+    end_time = :end_time 
+    WHERE id = :id;";
+
 $db->query($updateQuery, [
     "title" => $title,
     "description" => $description,
@@ -63,7 +69,7 @@ $db->query($updateQuery, [
 
 //add options
 $addQuery = "INSERT INTO options (poll_id, option_text) VALUES (:poll_id, :option_text);";
-foreach($added as $index){
+foreach ($addedOptions as $index) {
     $db->query($addQuery, [
         "poll_id" => $id,
         "option_text" => $options[$index]
@@ -72,7 +78,7 @@ foreach($added as $index){
 
 //edit options
 $editQuery = "UPDATE options SET option_text = :option_text WHERE id = :id;";
-foreach($edited as $index){
+foreach ($editedOptions as $index) {
     $db->query($editQuery, [
         "id" => $index,
         "option_text" => $options[$index]
@@ -80,9 +86,9 @@ foreach($edited as $index){
 }
 
 //delete options
-$editQuery = "DELETE FROM options WHERE id = :id;";
-foreach($deleted as $index){
-    $db->query($editQuery, [
+$deleteQuery = "DELETE FROM options WHERE id = :id;";
+foreach ($deletedOptions as $index) {
+    $db->query($deleteQuery, [
         "id" => $index,
     ]);
 }

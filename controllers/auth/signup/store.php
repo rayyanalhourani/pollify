@@ -5,9 +5,7 @@ use \Core\Validator;
 use \Core\App;
 use \Core\Database;
 
-
 $db = App::resolve(Database::class);
-
 
 $name = $_POST['name'];
 $email = $_POST['email'];
@@ -31,7 +29,7 @@ if ($password !== $cpassword) {
     $errors['cpassword'] = 'The password and confirmation password do not match.';
 }
 
-$user = $db->query("select * from users where email=:email",["email"=>$email])->find();
+$user = $db->query("select * from users where email=:email", ["email" => $email])->find();
 
 if ($user) {
     $errors['email'] = 'This email address is used before.';
@@ -50,7 +48,7 @@ $db->query("INSERT INTO users (name, email, password) VALUES (:name, :email, :pa
     "password" => password_hash($password, PASSWORD_BCRYPT),
 ]);
 
-$user = $db->query("select * from users where email=:email",["email"=>$email])->find();
+$user = $db->query("select * from users where email=:email", ["email" => $email])->find();
 
 (new Authenticator)->login($user);
 redirect("/");
