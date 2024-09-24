@@ -16,7 +16,7 @@ class Router
             'uri' => $uri,
             'controller' => $controller,
             'method' => $method,
-            'middleware' => null
+            'middleware' => [],
         ];
 
         return $this;
@@ -47,9 +47,9 @@ class Router
         return $this->add('PUT', $uri, $controller);
     }
 
-    public function only($key)
+    public function only($middlewares)
     {
-        $this->routes[array_key_last($this->routes)]['middleware'] = $key;
+        $this->routes[array_key_last($this->routes)]['middleware'] = $middlewares;
 
         return $this;
     }
@@ -58,7 +58,10 @@ class Router
     {
         foreach ($this->routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
-                Middleware::resolve($route['middleware']);
+
+                foreach($route['middleware'] as $middleware){
+                    Middleware::resolve($middleware);
+                }
 
                 return require base_path('controllers/' . $route['controller']);
             }
