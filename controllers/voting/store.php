@@ -33,12 +33,8 @@ if ($error != null) {
         "id" => $id
     ])->find();
 
-    $getOptionsAndVotes = "SELECT o.poll_id ,o.id AS id,o.option_text,COUNT(v.id) AS voting_count 
-    FROM options o
-    LEFT JOIN votes v ON o.id = v.option_id 
-    WHERE o.poll_id = :id 
-    GROUP BY o.id, o.option_text;";
-    $options = $db->query($getOptionsAndVotes, ["id" => $id])->get();
+    $getOptions = "SELECT * from options WHERE poll_id=:id";
+    $options = $db->query($getOptions, ["id" => $id])->get();
 
     $userVoteQuery = "SELECT * from votes where poll_id = :poll_id and voter_id=:voter_id;";
     $vottedOption = $db->query($userVoteQuery, [

@@ -32,10 +32,10 @@ require "../views/partials/nav.view.php";
                         <?php foreach ($options as $option) : ?>
                             <div class="flex items-center ps-4 border border-gray-200 rounded min-w-96">
                                 <input type="hidden" name="poll_id" value="<?= $option["poll_id"] ?>">
-                                <input id="bordered-radio-<?= $option['id'] ?>" type="radio" value="<?= $option['id'] ?>" name="option" class="w-4 h-4 text-blue-600 bg-gray-300 border-gray-600 focus:ring-blue-500 focus:ring-2 "
-                                <?= $vottedOption==$option['id']?"checked":""?>>
-                                <label for="bordered-radio-<?= $option['id'] ?>" class="w-full py-4 ms-2 text-md font-medium text-gray-900 dark:text-gray-300"><?= $option['option_text'] ?></label>
-                                <p class="px-4 text-md"><?= $option['voting_count'] ?></p>
+                                <input id="option_<?= $option['id'] ?>" type="radio" value="<?= $option['id'] ?>" name="option" class="w-4 h-4 text-blue-600 bg-gray-300 border-gray-600 focus:ring-blue-500 focus:ring-2 "
+                                    <?= $vottedOption == $option['id'] ? "checked" : "" ?>>
+                                <label for="option_<?= $option['id'] ?>" class="w-full py-4 ms-2 text-md font-medium text-gray-900 dark:text-gray-300"><?= $option['option_text'] ?></label>
+                                <p id="optionCount_<?= $option['id'] ?>" class="px-4 text-md"></p>
                             </div>
                         <?php endforeach; ?>
                         <div class="text-red-500 text-lg"><?= $error ?? "" ?></div>
@@ -46,5 +46,32 @@ require "../views/partials/nav.view.php";
         </div>
     </div>
 </main>
+
+<script>
+    function getVotingCount() {
+        fetch('/api/voting-count?id=<?= $poll["id"] ?>')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                let votes=data["options"]
+
+                votes.forEach(option => {
+                    let option_id=option["id"];
+                    let count= option["count"]??0
+                    document.getElementById("optionCount_"+option_id).innerHTML=count;
+                    console.log(123);
+                });
+            })
+            .catch(error => console.error('There was a problem with the fetch operation:', error));
+    }
+
+    getVotingCount()
+
+    setInterval(getVotingCount, 3000);
+</script>
 
 <?php require "../views/partials/footer.view.php"; ?>

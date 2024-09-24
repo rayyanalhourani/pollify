@@ -24,3 +24,6 @@ $router->get('/polls/show', 'polls/show.php')->only(["auth", "admin"]);
 $router->get('/voting', 'voting/index.php')->only(["auth"]);
 $router->get('/voting/vote', 'voting/show.php')->only(["auth"]);
 $router->post('/voting/vote', 'voting/store.php')->only(["auth"]);
+
+//api
+$router->get('/api/voting-count', 'api/getVotingCount.php');
