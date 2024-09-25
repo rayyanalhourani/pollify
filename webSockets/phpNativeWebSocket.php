@@ -56,7 +56,6 @@ while (true) {
     }
 
     // Handle incoming data from clients
-    // Handle incoming data from clients
     foreach ($clients as $key => $client_socket) {
         if (in_array($client_socket, $read_sockets)) {
             $data = socket_read($client_socket, 1024);

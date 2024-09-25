@@ -6,10 +6,15 @@
             "email": "rayyan.alhourani02@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "openswoole/core": "^22.1"
+    },
     "autoload": {
         "psr-4": {
             "Core\\":"Core/"
         }
+    },
+    "require-dev": {
+        "openswoole/ide-helper": "^22.1"
     }
 }
