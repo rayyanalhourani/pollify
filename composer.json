@@ -1,0 +1,15 @@
+{
+    "name": "rayyan/pollify",
+    "authors": [
+        {
+            "name": "rayyanalhourani",
+            "email": "rayyan.alhourani02@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Core\\":"Core/"
+        }
+    }
+}
