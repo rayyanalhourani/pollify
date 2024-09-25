@@ -48,30 +48,53 @@ require "../views/partials/nav.view.php";
 </main>
 
 <script>
-    function getVotingCount() {
-        fetch('/api/voting-count?id=<?= $poll["id"] ?>')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                let votes=data["options"]
+    // Retrieve the ID from the URL parameters
+    const searchParams = new URLSearchParams(window.location.search);
+    let id = searchParams.get('id');
 
-                votes.forEach(option => {
-                    let option_id=option["id"];
-                    let count= option["count"]??0
-                    document.getElementById("optionCount_"+option_id).innerHTML=count;
-                    console.log(123);
-                });
-            })
-            .catch(error => console.error('There was a problem with the fetch operation:', error));
+    // Create a new WebSocket connection
+    let socket = new WebSocket("ws://127.0.0.1:8085");
+
+    // Function to send the ID to the server
+    function sendId() {
+        if (socket.readyState === WebSocket.OPEN) {
+            // Send the ID to the server
+            socket.send(JSON.stringify({
+                id: id
+            }));
+            console.log("Sent ID to server:", id);
+        } else {
+            console.log("WebSocket is not open. Cannot send ID.");
+        }
     }
 
-    getVotingCount()
+    // When the WebSocket connection is opened
+    socket.onopen = function() {
+        console.log("Connected to WebSocket server");
+        sendId();
+    };
 
-    setInterval(getVotingCount, 3000);
+    // When a message is received from the server
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        console.log("Received data from server:", data);
+
+        data.forEach(option => {
+            let option_id = option["id"];
+            let count = option["count"] ?? 0;
+            document.getElementById("optionCount_" + option_id).innerHTML = count;
+        });
+    };
+
+    socket.onclose = function() {
+        console.log("Connection closed");
+    };
+
+    socket.onerror = function(error) {
+        console.error("WebSocket error observed:", error);
+    };
+
 </script>
+
 
 <?php require "../views/partials/footer.view.php"; ?>
