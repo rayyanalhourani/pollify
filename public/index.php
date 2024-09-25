@@ -9,6 +9,15 @@ const BASE_PATH = __DIR__ . '/../';
 
 require BASE_PATH . "./vendor/autoload.php";
 
+$env = file_get_contents(BASE_PATH."/.env");
+$lines = explode("\n",$env);
+foreach($lines as $line){
+  preg_match("/([^#]+)\=(.*)/",$line,$matches);
+  if(isset($matches[2])){
+    putenv(trim($line));
+  }
+} 
+
 require BASE_PATH . 'Core/functions.php';
 
 require base_path('bootstrap.php');

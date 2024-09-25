@@ -9,11 +9,12 @@ class Database
     public $connection;
     public $statement;
 
-    public function __construct($config, $username = '', $password = '')
+    public function __construct($HOST,$DBNAME,$CHARSET,$USER,$PASSWORD)
     {
-        $dsn = 'mysql:' . http_build_query($config, '', ';');
 
-        $this->connection = new PDO($dsn, $username, $password, [
+        $dsn = "mysql:host=$HOST;dbname=$DBNAME;charset=$CHARSET";
+
+        $this->connection = new PDO($dsn, $USER, $PASSWORD, [
            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         ]);
     }

@@ -7,9 +7,13 @@ use Core\Database;
 $container = new Container();
 
 $container->bind('Core\Database', function () {
-    $config = require base_path('config.php');
+    $HOST = getenv("HOST");
+    $DBNAME = getenv("DBNAME");
+    $CHARSET = getenv("CHARSET");
+    $USER = getenv("USER");
+    $PASSWORD = getenv("PASSWORD");
 
-    return new Database($config['database'],$config['database']["name"],$config['database']['password']);
+    return new Database($HOST,$DBNAME,$CHARSET,$USER,$PASSWORD);
 });
 
 App::setContainer($container);
