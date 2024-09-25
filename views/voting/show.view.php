@@ -47,54 +47,59 @@ require "../views/partials/nav.view.php";
     </div>
 </main>
 
+
 <script>
-    // Retrieve the ID from the URL parameters
     const searchParams = new URLSearchParams(window.location.search);
     let id = searchParams.get('id');
 
-    // Create a new WebSocket connection
-    let socket = new WebSocket("ws://127.0.0.1:8085");
+    let echo_service;
+    window.onload = function() {
 
-    // Function to send the ID to the server
-    function sendId() {
-        if (socket.readyState === WebSocket.OPEN) {
-            // Send the ID to the server
-            socket.send(JSON.stringify({
-                id: id
-            }));
-            console.log("Sent ID to server:", id);
-        } else {
-            console.log("WebSocket is not open. Cannot send ID.");
+        echo_service = new WebSocket('ws://127.0.0.1:8085');
+
+        echo_service.onmessage = function(event) {
+            if (isJson(event.data)) {
+                let data = JSON.parse(event.data);
+                console.log(data);
+                
+                data.forEach(option => {
+                    let option_id = option["id"];
+                    let count = option["count"] ?? 0;
+                    document.getElementById("optionCount_" + option_id).innerHTML = count;
+                });
+            } else {
+                console.log(event.data);
+            }
+            sendMessage()
+        }
+
+        echo_service.onopen = function() {
+            console.log("Connected to WebSocket!");
+        }
+        echo_service.onclose = function() {
+            console.log("Connection closed");
+        }
+        echo_service.onerror = function() {
+            console.log("Error happens");
+        }
+
+        function sendMessage() {
+            echo_service.send(id);
+        }
+
+        setInterval(sendMessage, 50)
+
+        function isJson(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
         }
     }
-
-    // When the WebSocket connection is opened
-    socket.onopen = function() {
-        console.log("Connected to WebSocket server");
-        sendId();
-    };
-
-    // When a message is received from the server
-    socket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        console.log("Received data from server:", data);
-
-        data.forEach(option => {
-            let option_id = option["id"];
-            let count = option["count"] ?? 0;
-            document.getElementById("optionCount_" + option_id).innerHTML = count;
-        });
-    };
-
-    socket.onclose = function() {
-        console.log("Connection closed");
-    };
-
-    socket.onerror = function(error) {
-        console.error("WebSocket error observed:", error);
-    };
-
 </script>
+
 
 
 <?php require "../views/partials/footer.view.php"; ?>
