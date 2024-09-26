@@ -52,12 +52,37 @@ $server->on('Open', function (Server $server, Request $request) use ($fds) {
 });
 
 $server->on('Message', function (Server $server, Frame $frame) use ($fds) {
-    $sender = $fds->get(strval($frame->fd), "name");
-    echo "Received from " . $sender . ", message: {}" . PHP_EOL;
-    $id = $frame->data;
-    foreach ($fds as $key => $value) {
-        $count = fetch_vote_counts($id);
-        $server->push($frame->fd,$count);
+    $data = json_decode($frame->data, true);
+    $poll_id = $data["poll_id"];
+
+    if ($data["action"] == "get") {
+        $response = [
+            "status" => "success",
+            "result" => fetch_vote_counts($poll_id)
+        ];
+        $server->push($frame->fd, json_encode($response));
+    } else {
+        $user_id = $data["user_id"];
+        $option_id = $data["option_id"];
+
+        $result = insert($poll_id, $option_id, $user_id);
+
+        if (isset($result["error"])) {
+            $response = [
+                "status" => "failed",
+                "error" => $result["error"]
+            ];
+            $server->push($frame->fd, json_encode($response));
+        } else {
+            $response = [
+                "status" => "success",
+                "result" => fetch_vote_counts($poll_id)
+            ];
+            foreach ($fds as $key => $value) {
+
+                $server->push($key, json_encode($response));
+            }
+        }
     }
 });
 
@@ -80,6 +105,46 @@ function fetch_vote_counts($id)
     $stmt = $pdo->query($query);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    
-    return json_encode($results);
+    return $results;
+}
+
+function insert($poll_id, $option_id, $user_id)
+{
+    global $pdo;
+    $result = [];
+    $selectQuery = "SELECT * FROM votes WHERE poll_id = :poll_id AND voter_id = :voter_id";
+    $stmt = $pdo->prepare($selectQuery);
+    $stmt->execute(["poll_id" => $poll_id, "voter_id" => $user_id]);
+    $vote = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $error = null;
+    if (!$option_id) {
+        $error = "You have choose at option";
+    } else if ($vote && $vote['option_id'] == $option_id) {
+        $error = "You have choose this option before";
+    }
+
+    if ($error) {
+        $result["error"] = $error;
+        return $result;
+    }
+
+    if ($vote) {
+        if ($vote['option_id'] != $option_id) {
+            $deleteQuery = "DELETE FROM votes WHERE id = :id";
+            $deleteStmt = $pdo->prepare($deleteQuery);
+            $deleteStmt->execute(["id" => $vote['id']]);
+        }
+
+        $voteQuery = "INSERT INTO votes (poll_id, option_id, voter_id) VALUES (:poll_id, :option_id, :voter_id)";
+        $stmt = $pdo->prepare($voteQuery);
+
+        $stmt->execute([
+            "poll_id" => $poll_id,
+            "option_id" => $option_id,
+            "voter_id" => $user_id
+        ]);
+
+        return $result;
+    }
 }

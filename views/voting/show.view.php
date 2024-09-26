@@ -28,18 +28,18 @@ require "../views/partials/nav.view.php";
                 </div>
                 <div class="px-4 py-4">
                     <dt class="text-md font-medium leading-6 text-gray-900">Options</dt>
-                    <form action="/voting/vote" method="POST" class="flex flex-col items-center justify-center mt-10 gap-3">
+                    <form id="votingForm" class="flex flex-col items-center justify-center mt-10 gap-3">
                         <?php foreach ($options as $option) : ?>
                             <div class="flex items-center ps-4 border border-gray-200 rounded min-w-96">
                                 <input type="hidden" name="poll_id" value="<?= $option["poll_id"] ?>">
-                                <input id="option_<?= $option['id'] ?>" type="radio" value="<?= $option['id'] ?>" name="option" class="w-4 h-4 text-blue-600 bg-gray-300 border-gray-600 focus:ring-blue-500 focus:ring-2 "
+                                <input id="option_<?= $option['id'] ?>" type="radio" value="<?= $option['id'] ?>" name="option" class="w-4 h-4 text-blue-600 bg-gray-300 border-gray-600 focus:ring-blue-500 focus:ring-2"
                                     <?= $vottedOption == $option['id'] ? "checked" : "" ?>>
                                 <label for="option_<?= $option['id'] ?>" class="w-full py-4 ms-2 text-md font-medium text-gray-900 dark:text-gray-300"><?= $option['option_text'] ?></label>
                                 <p id="optionCount_<?= $option['id'] ?>" class="px-4 text-md"></p>
                             </div>
                         <?php endforeach; ?>
-                        <div class="text-red-500 text-lg"><?= $error ?? "" ?></div>
-                        <input type="submit" class="mt-3 text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 focus:outline-none">
+                        <div id="error" class="text-red-500 text-lg"><?= $error ?? "" ?></div>
+                        <button type="button" id="submitVote" class="mt-3 text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 focus:outline-none">Submit Vote</button>
                     </form>
                 </div>
             </dl>
@@ -50,31 +50,42 @@ require "../views/partials/nav.view.php";
 
 <script>
     const searchParams = new URLSearchParams(window.location.search);
-    let id = searchParams.get('id');
+    let poll_id = searchParams.get('id');
+    let user_id = "<?php echo $_SESSION['user']['id']; ?>"
 
     let echo_service;
     window.onload = function() {
-
         echo_service = new WebSocket('ws://127.0.0.1:8085');
 
         echo_service.onmessage = function(event) {
-            if (isJson(event.data)) {
-                let data = JSON.parse(event.data);
+            let data = event.data;
+
+            if (!isJson(data)) {
                 console.log(data);
-                
-                data.forEach(option => {
+                return;
+            }
+
+            let response = JSON.parse(data);
+
+            if (response["status"] == "success") {
+                let result = response["result"];
+
+                result.forEach(option => {
                     let option_id = option["id"];
                     let count = option["count"] ?? 0;
                     document.getElementById("optionCount_" + option_id).innerHTML = count;
                 });
             } else {
-                console.log(event.data);
+                document.getElementById("error").textContent = response["error"];
             }
-            sendMessage()
         }
 
         echo_service.onopen = function() {
             console.log("Connected to WebSocket!");
+            sendMessage({
+                poll_id: poll_id,
+                action: "get"
+            })
         }
         echo_service.onclose = function() {
             console.log("Connection closed");
@@ -83,11 +94,9 @@ require "../views/partials/nav.view.php";
             console.log("Error happens");
         }
 
-        function sendMessage() {
-            echo_service.send(id);
+        function sendMessage($msg) {
+            echo_service.send(JSON.stringify($msg));
         }
-
-        setInterval(sendMessage, 50)
 
         function isJson(str) {
             try {
@@ -97,6 +106,22 @@ require "../views/partials/nav.view.php";
             }
             return true;
         }
+
+        document.getElementById('submitVote').onclick = function() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (selectedOption) {
+                const option_id = selectedOption.value;
+
+                sendMessage({
+                    action: "submit",
+                    poll_id: poll_id,
+                    user_id: user_id,
+                    option_id: option_id
+                })
+            } else {
+                document.getElementById('error').textContent = 'Please select an option before voting.';
+            }
+        };
     }
 </script>
 
