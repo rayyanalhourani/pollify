@@ -74,6 +74,8 @@ require "../views/partials/nav.view.php";
                     let option_id = option["id"];
                     let count = option["count"] ?? 0;
                     document.getElementById("optionCount_" + option_id).innerHTML = count;
+                    document.getElementById("error").textContent = "";
+
                 });
             } else {
                 document.getElementById("error").textContent = response["error"];

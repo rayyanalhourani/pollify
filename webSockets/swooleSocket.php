@@ -129,22 +129,23 @@ function insert($poll_id, $option_id, $user_id)
         return $result;
     }
 
+
     if ($vote) {
-        if ($vote['option_id'] != $option_id) {
+        if (($vote['option_id'] != $option_id)) {
             $deleteQuery = "DELETE FROM votes WHERE id = :id";
             $deleteStmt = $pdo->prepare($deleteQuery);
             $deleteStmt->execute(["id" => $vote['id']]);
         }
-
-        $voteQuery = "INSERT INTO votes (poll_id, option_id, voter_id) VALUES (:poll_id, :option_id, :voter_id)";
-        $stmt = $pdo->prepare($voteQuery);
-
-        $stmt->execute([
-            "poll_id" => $poll_id,
-            "option_id" => $option_id,
-            "voter_id" => $user_id
-        ]);
-
-        return $result;
     }
+
+    $voteQuery = "INSERT INTO votes (poll_id, option_id, voter_id) VALUES (:poll_id, :option_id, :voter_id)";
+    $stmt = $pdo->prepare($voteQuery);
+
+    $stmt->execute([
+        "poll_id" => $poll_id,
+        "option_id" => $option_id,
+        "voter_id" => $user_id
+    ]);
+
+    return $result;
 }
