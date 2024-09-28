@@ -13,12 +13,16 @@
                             class="rounded-md px-3 py-2 text-sm font-medium <?= urlIs("/") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Home</a>
                         <a href="/voting"
                             class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/voting") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Voting</a>
-                        <a href="/polls"
-                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/polls") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Polls</a>
                         <a href="/about"
                             class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/about") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">About</a>
                         <a href="/contact"
                             class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/contact") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Contact</a>
+                        <?php if ($_SESSION["user"]["role"]=="admin") : ?>
+                            <a href="/polls"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/polls") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Polls</a>
+                            <a href="/users"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 <?= urlIs("/users") ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white"; ?>">Users</a>
+                        <?php endif ?>
                     </div>
                 </div>
             </div>
@@ -35,7 +39,6 @@
                                     d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                             </svg>
                         </button>
-
                         <!-- Profile dropdown -->
                         <div class="relative ml-3">
                             <div>
@@ -51,14 +54,11 @@
                             </div>
                         </div>
                     <?php endif; ?>
-
                     <div class="mt-1 px-2 flex items-center">
-
                         <?php if (isset($_SESSION['user']["email"])): ?>
                             <form action="/logout" method="post"><button
                                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign
                                     out</button></form>
-
                         <?php else: ?>
                             <a href="/login"
                                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Login</a>
@@ -67,7 +67,6 @@
                                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign
                                 up</a>
                         <?php endif; ?>
-
                     </div>
                 </div>
             </div>

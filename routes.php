@@ -19,6 +19,8 @@ $router->post('/polls/create', 'polls/store.php')->only(["auth", "admin"]);
 $router->put('/polls/update', 'polls/update.php')->only(["auth", "admin"]);
 $router->delete('/polls', 'polls/delete.php')->only(["auth", "admin"]);
 $router->get('/polls/show', 'polls/show.php')->only(["auth", "admin"]);
+$router->put('/polls/end', 'polls/end.php')->only(["auth", "admin"]);
+
 
 //voting
 $router->get('/voting', 'voting/index.php')->only(["auth"]);

@@ -5,9 +5,17 @@ require "../views/partials/nav.view.php";
 
 <main>
     <div class="mx-auto p-6 my-4 w-[1100px] bg-white shadow-md">
-        <div class="px-4  px-0">
-            <h3 class="text-base font-semibold leading-7 text-gray-900">Poll Information</h3>
-            <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Poll and votes details.</p>
+        <div class="flex justify-between items-center">
+            <div class="px-4 px-0">
+                <h3 class="text-base font-semibold leading-7 text-gray-900">Poll Information</h3>
+                <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Poll and votes details.</p>
+            </div>
+            <form action="/polls/end" method="post">
+                <input type="hidden" name="_method" value="put">
+                <input type="hidden" name="id" value="<?= $poll['id']?>">
+                <button type="submit"
+                    class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">End poll</button>
+            </form>
         </div>
         <div class="mt-6 border-t border-gray-100">
             <dl class="divide-y divide-gray-100">
