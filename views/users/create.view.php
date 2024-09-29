@@ -5,93 +5,55 @@ require "../views/partials/nav.view.php";
 
 <main>
     <div class="flex min-h-full flex-col justify-center px-6 py-6 lg:px-8">
-        <h2 class=" text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create new poll
+        <h2 class=" text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Edit user
     </div>
     <div class="sm:mx-auto sm:w-full sm:max-w-sm pb-10">
-        <form class="space-y-5 " action="/polls/create" method="POST">
+        <form class="space-y-5 " action="/users/create" method="POST">
             <div>
-                <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Title</label>
+                <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
                 <div class="mt-2">
-                    <input id="title" name="title" type="text" required
+                    <input id="name" name="name" type="text" value='' required
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
-                <div class="text-red-500 text-sm"><?= $errors["title"] ?? "" ?></div>
+                <div class="text-red-500 text-sm"><?= $errors["name"] ?? "" ?></div>
             </div>
             <div>
-                <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
-                <textarea
-                    id="description"
-                    name="description"
-                    class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 placeholder:text-sm focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                    rows="4"
-                    placeholder="Enter the description..."
-                    require></textarea>
-                <div class="text-red-500 text-sm"><?= $errors["description"] ?? "" ?></div>
-            </div>
-            <div>
-                <div class="flex items-center justify-between">
-                    <label for="start_time" class="block text-sm font-medium leading-6 text-gray-900">Start time</label>
-                </div>
+                <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
                 <div class="mt-2">
-                    <input id="start_time" name="start_time" type="datetime-local" require
+                    <input id="email" name="email" type="text" value='' required
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
-                <div class="text-red-500 text-sm"><?= $errors["start_time"] ?? "" ?></div>
+                <div class="text-red-500 text-sm"><?= $errors["email"] ?? "" ?></div>
             </div>
             <div>
-                <div class="flex items-center justify-between">
-                    <label for="end_time" class="block text-sm font-medium leading-6 text-gray-900">End time</label>
-                </div>
+                <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+                <select id="role" name="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="admin">Admin</option>
+                    <option value="voter" selected>Voter</option>
+                </select>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                 <div class="mt-2">
-                    <input id="end_time" name="end_time" type="datetime-local" require
+                    <input id="password" name="password" type="text" value='' require
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
-                <div class="text-red-500 text-sm"><?= $errors["end_time"] ?? "" ?></div>
+                <div class="text-red-500 text-sm"><?= $errors["password"] ?? "" ?></div>
             </div>
-            <!-- options -->
-            <div class="flex justify-center flex-col">
-                <div class="flex justify-between items-center">
-                    <h1 class="text-lg">Options</h1>
-                    <button type="button" onclick="addOption()" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2">Add Option</button>
+            <div>
+                <label for="cpassword" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
+                <div class="mt-2">
+                    <input id="cpassword" name="cpassword" type="text" value='' require
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
-                <div class="text-red-500 text-sm"><?= $errors["options"] ?? "" ?></div>
-
-                <div id="options">
-
-                </div>
+                <div class="text-red-500 text-sm"><?= $errors["cpassword"] ?? "" ?></div>
             </div>
             <div>
                 <button type="submit"
-                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create poll</button>
+                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
             </div>
         </form>
     </div>
     </div>
 </main>
-
-<script>
-    let numOfOptions = 1
-
-    function addOption() {
-
-        let option = `<div class="mt-2 flex justify-between items-center" id="option_${numOfOptions}">
-                        <input name="options[]" type="text" 
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-
-                        <svg class="w-6 h-6 text-red-800 cursor-pointer" onclick="deleteOption(${numOfOptions})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd" />
-                        </svg>
-                    </div>`
-
-        numOfOptions++
-        
-        let temp = document.createElement('div');
-        temp.innerHTML = option
-        document.getElementById("options").appendChild(temp)
-    }
-
-    function deleteOption(id) {
-        document.getElementById("option_" + id).remove();
-    }
-</script>
 <?php require "../views/partials/footer.view.php"; ?>
