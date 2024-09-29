@@ -21,11 +21,18 @@ $router->delete('/polls', 'polls/delete.php')->only(["auth", "admin"]);
 $router->get('/polls/show', 'polls/show.php')->only(["auth", "admin"]);
 $router->put('/polls/end', 'polls/end.php')->only(["auth", "admin"]);
 
-
 //voting
 $router->get('/voting', 'voting/index.php')->only(["auth"]);
 $router->get('/voting/vote', 'voting/show.php')->only(["auth"]);
 $router->post('/voting/vote', 'voting/store.php')->only(["auth"]);
+
+//polls
+$router->get('/users', 'users/index.php')->only(["auth", "admin"]);
+$router->get('/users/create', 'users/create.php')->only(["auth", "admin"]);
+$router->get('/users/edit', 'users/edit.php')->only(["auth", "admin"]);
+$router->post('/users/create', 'users/store.php')->only(["auth", "admin"]);
+$router->put('/users/update', 'users/update.php')->only(["auth", "admin"]);
+$router->delete('/users', 'users/delete.php')->only(["auth", "admin"]);
 
 //api
 $router->get('/api/voting-count', 'api/getVotingCount.php');
