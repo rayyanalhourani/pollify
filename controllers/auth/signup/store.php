@@ -4,6 +4,7 @@ use Core\Authenticator;
 use \Core\Validator;
 use \Core\App;
 use \Core\Database;
+use Core\Session;
 
 $db = App::resolve(Database::class);
 
@@ -36,6 +37,9 @@ if ($user) {
 }
 
 if (!empty($errors)) {
+    Session::flash('name',$name);
+    Session::flash('email',$email);
+
     return view("auth/signup.view.php", [
         "title" => "Sign up",
         "errors" => $errors
