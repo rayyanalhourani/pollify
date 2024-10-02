@@ -5,31 +5,31 @@ require "../views/partials/nav.view.php";
 
 <main>
 
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+    <div class="flex min-h-full flex-col justify-center px-6">
+        <div class="">
+            <img class="mx-auto h-52 w-52 w-auto" src="/images/logo1.png"
                 alt="Your Company">
-            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create new account
+            <h2 class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create new account
             </h2>
         </div>
 
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" action="/signup" method="POST">
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <form class="space-y-4" action="/signup" method="POST">
                 <div>
                     <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Full name</label>
                     <div class="mt-2">
-                        <input id="name" name="name" type="name" autocomplete="name" value="<?= old('name')?>" required
+                        <input id="name" name="name" type="name" autocomplete="name" value="<?= old('name') ?>" required
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
-                    <div class="text-red-500 text-sm"><?= $errors["name"] ?? ""?></div>
+                    <div class="text-red-500 text-sm"><?= $errors["name"] ?? "" ?></div>
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                     <div class="mt-2">
-                        <input id="email" name="email" type="email" autocomplete="email" value="<?= old('email')?>" required
+                        <input id="email" name="email" type="email" autocomplete="email" value="<?= old('email') ?>" required
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
-                    <div class="text-red-500 text-sm"><?= $errors["email"] ?? ""?></div>
+                    <div class="text-red-500 text-sm"><?= $errors["email"] ?? "" ?></div>
                 </div>
                 <div>
                     <div class="flex items-center justify-between">
@@ -39,7 +39,7 @@ require "../views/partials/nav.view.php";
                         <input id="password" name="password" type="password" autocomplete="current-password" required
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
-                    <div class="text-red-500 text-sm"><?= $errors["password"] ?? ""?></div>
+                    <div class="text-red-500 text-sm"><?= $errors["password"] ?? "" ?></div>
 
                 </div>
                 <div>
@@ -51,7 +51,7 @@ require "../views/partials/nav.view.php";
                         <input id="cpassword" name="cpassword" type="password" autocomplete="current-password" required
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
-                    <div class="text-red-500 text-sm"><?= $errors["cpassword"] ?? ""?></div>
+                    <div class="text-red-500 text-sm"><?= $errors["cpassword"] ?? "" ?></div>
 
                 </div>
 

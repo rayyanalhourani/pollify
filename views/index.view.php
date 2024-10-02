@@ -66,7 +66,7 @@ view("partials/banner.view.php");
         </div>
 
         <div class="flex items-center justify-center w-full h-96 lg:w-1/2">
-            <img class="object-cover w-full h-full max-w-2xl rounded-md" src="images/vote.jpeg" alt="vote photo">
+            <img class="object-cover w-full h-full max-w-2xl rounded-md" src="images/vote.png" alt="vote photo">
         </div>
     </div>
 </main>
