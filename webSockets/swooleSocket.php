@@ -28,6 +28,7 @@ $server = new Server("127.0.0.1", 8085, Server::SIMPLE_MODE, Constant::SOCK_TCP)
 $fds = new Table(1024);
 $fds->column('fd', Table::TYPE_INT, 4);
 $fds->column('name', Table::TYPE_STRING, 16);
+$fds->column('poll_id', Table::TYPE_STRING, 4);
 $fds->create();
 
 $server->on("Start", function (Server $server) {
@@ -55,6 +56,15 @@ $server->on('Message', function (Server $server, Frame $frame) use ($fds) {
     $data = json_decode($frame->data, true);
     $poll_id = $data["poll_id"];
 
+    $fd = $frame->fd;
+    $name = $fds->get($frame->fd, "name");
+
+    $fds->set($fd, [
+        'fd' => $fd,
+        'name' => $name,
+        'poll_id' => $poll_id
+    ]);
+
     if ($data["action"] == "get") {
         $response = [
             "status" => "success",
@@ -79,8 +89,9 @@ $server->on('Message', function (Server $server, Frame $frame) use ($fds) {
                 "result" => fetch_vote_counts($poll_id)
             ];
             foreach ($fds as $key => $value) {
-
-                $server->push($key, json_encode($response));
+                if ($poll_id == $value['poll_id']) {
+                    $server->push($key, json_encode($response));
+                }
             }
         }
     }

@@ -135,6 +135,7 @@ require "../views/partials/nav.view.php";
                 })
 
                 showAlert();
+                setTimeout(closeAlert,3000)
             } else {
                 document.getElementById('error').textContent = 'Please select an option before voting.';
             }
