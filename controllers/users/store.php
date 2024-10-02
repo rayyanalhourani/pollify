@@ -4,6 +4,7 @@ use Core\Authenticator;
 use \Core\Validator;
 use \Core\App;
 use \Core\Database;
+use Core\Session;
 
 $db = App::resolve(Database::class);
 
@@ -37,6 +38,10 @@ if ($user) {
 }
 
 if (!empty($errors)) {
+    Session::flash("name",$name);
+    Session::flash("email",$email);
+    Session::flash("role",$role);
+
     return view("users/create.view.php", [
         "title" => "Create user",
         "errors" => $errors

@@ -2,6 +2,7 @@
 
 use Core\App;
 use Core\Database;
+use Core\Session;
 use Core\Validator;
 
 $title = $_POST["title"];
@@ -34,6 +35,12 @@ if (empty($options) or in_array("", $options)) {
 }
 
 if (!empty($errors)) {
+    Session::flash("title",$title);
+    Session::flash("description",$description);
+    Session::flash("start_time",$start_time);
+    Session::flash("end_time",$end_time);
+    Session::flash("options",$options);
+
     return view("polls/create.view.php", [
         "title" => "Create poll",
         "errors" => $errors

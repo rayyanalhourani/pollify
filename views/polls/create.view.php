@@ -12,7 +12,7 @@ require "../views/partials/nav.view.php";
             <div>
                 <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Title</label>
                 <div class="mt-2">
-                    <input id="title" name="title" type="text" required
+                    <input id="title" name="title" type="text" required value="<?= old('title') ?>"
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
                 <div class="text-red-500 text-sm"><?= $errors["title"] ?? "" ?></div>
@@ -22,6 +22,7 @@ require "../views/partials/nav.view.php";
                 <textarea
                     id="description"
                     name="description"
+                    value="<?= old('description') ?>"
                     class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 placeholder:text-sm focus:ring-2 focus:ring-inset focus:ring-indigo-600"
                     rows="4"
                     placeholder="Enter the description..."
@@ -33,7 +34,7 @@ require "../views/partials/nav.view.php";
                     <label for="start_time" class="block text-sm font-medium leading-6 text-gray-900">Start time</label>
                 </div>
                 <div class="mt-2">
-                    <input id="start_time" name="start_time" type="datetime-local" require
+                    <input id="start_time" name="start_time" type="datetime-local" value="<?= old('start_time') ?>" require
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
                 <div class="text-red-500 text-sm"><?= $errors["start_time"] ?? "" ?></div>
@@ -43,7 +44,7 @@ require "../views/partials/nav.view.php";
                     <label for="end_time" class="block text-sm font-medium leading-6 text-gray-900">End time</label>
                 </div>
                 <div class="mt-2">
-                    <input id="end_time" name="end_time" type="datetime-local" require
+                    <input id="end_time" name="end_time" type="datetime-local" value="<?= old('end_time') ?>" require
                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
                 <div class="text-red-500 text-sm"><?= $errors["end_time"] ?? "" ?></div>
@@ -69,13 +70,20 @@ require "../views/partials/nav.view.php";
     </div>
 </main>
 
+
+
 <script>
     let numOfOptions = 1
 
-    function addOption() {
+    let oldOptions = JSON.parse('<?= json_encode(old('options')) ?>');
 
+    oldOptions.forEach(content => {
+        addOption(content);
+    });
+
+    function addOption(content = '') {
         let option = `<div class="mt-2 flex justify-between items-center" id="option_${numOfOptions}">
-                        <input name="options[]" type="text" 
+                        <input name="options[]" type="text" value="${content}"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
 
                         <svg class="w-6 h-6 text-red-800 cursor-pointer" onclick="deleteOption(${numOfOptions})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -84,7 +92,7 @@ require "../views/partials/nav.view.php";
                     </div>`
 
         numOfOptions++
-        
+
         let temp = document.createElement('div');
         temp.innerHTML = option
         document.getElementById("options").appendChild(temp)
