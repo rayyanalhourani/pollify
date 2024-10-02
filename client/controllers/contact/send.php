@@ -1,5 +1,6 @@
 <?php
 
+use Core\Session;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -7,6 +8,7 @@ use PHPMailer\PHPMailer\Exception;
 $email = htmlspecialchars(trim($_POST['email']));
 $subject = htmlspecialchars(trim($_POST['subject']));
 $message = htmlspecialchars(trim($_POST['message']));
+
 
 // Email validation
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -40,12 +42,19 @@ try {
          <p><strong>Message:</strong><br>{$message}</p>
      ";
 
+    $result = "";
     // Send the email
     if ($mail->send()) {
-        echo "Message sent successfully!";
+        $result = "Message sent successfully!";
     } else {
-        echo "Message could not be sent.";
+        $result = "Message could not be sent.";
     }
 } catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    $result = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
+
+Session::flash("result",$result);
+Session::flash("subject",$subject);
+Session::flash("message",$message);
+
+redirect("/contact");
