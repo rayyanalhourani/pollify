@@ -7,7 +7,9 @@ session_start();
 
 const BASE_PATH = __DIR__ . '/../';
 
-require BASE_PATH . "./vendor/autoload.php";
+require BASE_PATH . "../vendor/autoload.php";
+
+
 
 $env = file_get_contents(BASE_PATH."/.env");
 $lines = explode("\n",$env);
