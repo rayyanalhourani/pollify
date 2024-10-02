@@ -7,7 +7,8 @@
         }
     ],
     "require": {
-        "openswoole/core": "^22.1"
+        "openswoole/core": "^22.1",
+        "phpmailer/phpmailer": "^6.9"
     },
     "autoload": {
         "psr-4": {

@@ -2,7 +2,8 @@
 
 $router->get('/', 'index.php');
 $router->get('/about', 'about.php');
-$router->get('/contact', 'contact.php');
+$router->get('/contact', 'contact/contact.php');
+$router->post('/contact', 'contact/send.php');
 
 //authentication
 $router->get('/login', 'auth/login/index.php')->only(["guest"]);
