@@ -11,7 +11,7 @@ require BASE_PATH . "../vendor/autoload.php";
 
 
 
-$env = file_get_contents(BASE_PATH."/.env");
+$env = file_get_contents(BASE_PATH."../.env");
 $lines = explode("\n",$env);
 foreach($lines as $line){
   preg_match("/([^#]+)\=(.*)/",$line,$matches);

@@ -5,14 +5,23 @@ use OpenSwoole\Constant;
 use OpenSwoole\Http\Request;
 use OpenSwoole\Table;
 
-use Core\App;
-use Core\Database;
+const BASE_PATH = __DIR__ . '/../';
 
-$host = 'localhost';
-$db = 'pollify';
-$user = 'root';
-$pass = '123456';
-$charset = 'utf8mb4';
+$env = file_get_contents(BASE_PATH."/.env");
+$lines = explode("\n",$env);
+foreach($lines as $line){
+  preg_match("/([^#]+)\=(.*)/",$line,$matches);
+  if(isset($matches[2])){
+    putenv(trim($line));
+  }
+} 
+
+
+$host = getenv("HOST");
+$db = getenv("DBNAME");
+$charset = getenv("CHARSET");
+$user = getenv("USER");
+$pass = getenv("PASSWORD");
 
 try {
     // Set up the PDO database connection

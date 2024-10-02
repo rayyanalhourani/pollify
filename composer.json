@@ -11,7 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Core\\":"Client/Core/"
+            "Core\\":"client/Core/"
         }
     },
     "require-dev": {
