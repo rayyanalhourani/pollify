@@ -18,10 +18,22 @@ $db = App::resolve(Database::class);
 $poll_id = $_POST['poll_id'];
 $option_id = $_POST['option'] ?? null;
 
+$selectQuery = "SELECT * from polls where  = :id";
+$poll = $db->query($selectQuery, ["id" => $poll_id])->find();
+
+$currentDateTime = date('Y-m-d H:i:s');
+$error = null;
+
+$selectQuery = "SELECT * FROM polls WHERE id = :id";
+$poll = $db->query($selectQuery, ["id" => $poll_id])->find();
+
+if ($poll && $poll['end_time'] <= $currentDateTime) {
+    return;
+} 
+
 $selectQuery = "SELECT * from votes where poll_id = :poll_id and voter_id=:voter_id;";
 $vote = $db->query($selectQuery, ["poll_id" => $poll_id, "voter_id" => $_SESSION["user"]["id"]])->find();
 
-$error = null;
 if (!$_POST['option']) {
     $error = "You have choose at option";
 } else if ($vote['option_id'] == $option_id) {
