@@ -43,3 +43,7 @@ CREATE TABLE votes (
     FOREIGN KEY (voter_id) REFERENCES users(id)
     ON DELETE CASCADE
 );
+
+-- Insert admin user
+INSERT INTO users (name, email, password, role, status)
+VALUES ('Admin', 'admin@admin.com', '$2y$10$XSoF8JKl46dX0../Ne7jouE8Fz3YmLgZ/9qOs06KLrefro8gam/Zm', 'admin', 'active');

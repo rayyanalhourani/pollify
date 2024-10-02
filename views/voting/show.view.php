@@ -28,6 +28,21 @@ require "../views/partials/nav.view.php";
                 </div>
                 <div class="px-4 py-4">
                     <dt class="text-md font-medium leading-6 text-gray-900">Options</dt>
+                    <div id="alert" class="hidden opacity-0 transition-opacity duration-500 ease-in-out flex items-center p-4 text-green-800 rounded-lg bg-green-50 mt-5" role="alert">
+                        <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span class="sr-only">Info</span>
+                        <div class="ms-3 text-md font-medium">
+                            You have been submit the vote successfully
+                        </div>
+                        <button type="button" onclick="closeAlert()" class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#alert-3" aria-label="Close">
+                            <span class="sr-only">Close</span>
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                        </button>
+                    </div>
                     <form id="votingForm" class="flex flex-col items-center justify-center mt-10 gap-3">
                         <?php foreach ($options as $option) : ?>
                             <div class="flex items-center ps-4 border border-gray-200 rounded min-w-96">
@@ -46,18 +61,16 @@ require "../views/partials/nav.view.php";
         </div>
     </div>
 </main>
-
-
 <script>
     const searchParams = new URLSearchParams(window.location.search);
     let poll_id = searchParams.get('id');
     let user_id = "<?php echo $_SESSION['user']['id']; ?>"
 
-    let echo_service;
+    let webSocket;
     window.onload = function() {
-        echo_service = new WebSocket('ws://127.0.0.1:8085');
+        webSocket = new WebSocket('ws://127.0.0.1:8085');
 
-        echo_service.onmessage = function(event) {
+        webSocket.onmessage = function(event) {
             let data = event.data;
 
             if (!isJson(data)) {
@@ -82,22 +95,22 @@ require "../views/partials/nav.view.php";
             }
         }
 
-        echo_service.onopen = function() {
+        webSocket.onopen = function() {
             console.log("Connected to WebSocket!");
             sendMessage({
                 poll_id: poll_id,
                 action: "get"
             })
         }
-        echo_service.onclose = function() {
+        webSocket.onclose = function() {
             console.log("Connection closed");
         }
-        echo_service.onerror = function() {
+        webSocket.onerror = function() {
             console.log("Error happens");
         }
 
         function sendMessage($msg) {
-            echo_service.send(JSON.stringify($msg));
+            webSocket.send(JSON.stringify($msg));
         }
 
         function isJson(str) {
@@ -120,10 +133,30 @@ require "../views/partials/nav.view.php";
                     user_id: user_id,
                     option_id: option_id
                 })
+
+                showAlert();
             } else {
                 document.getElementById('error').textContent = 'Please select an option before voting.';
             }
         };
+    }
+</script>
+
+<script>
+    function showAlert() {
+        const alert = document.getElementById('alert');
+        alert.classList.remove('hidden');
+        setTimeout(() => {
+            alert.classList.remove('opacity-0');
+        }, 10);
+    }
+
+    function closeAlert() {
+        const alert = document.getElementById('alert');
+        alert.classList.add('opacity-0');
+        setTimeout(() => {
+            alert.classList.add('hidden');
+        }, 500); 
     }
 </script>
 
