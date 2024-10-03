@@ -47,8 +47,6 @@ if (!empty($errors)) {
     Session::flash('errors',$errors);
 
     redirect("/signup");
-
-    (new \Core\Captcha)->generateCaptcha();
 }
 
 $db->query("INSERT INTO users (name, email, password) VALUES (:name, :email, :password);", [
