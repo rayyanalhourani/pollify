@@ -7,7 +7,7 @@ require "../views/partials/nav.view.php";
 
     <div class="flex min-h-full flex-col justify-center">
         <div class="">
-            <img class="mx-auto h-60 w-60 w-auto" src="/images/logo1.png"
+            <img class="mx-auto h-60 w-60 w-auto" src="/images/logos/logo1.png"
                 alt="Your Company">
             <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your
                 account</h2>

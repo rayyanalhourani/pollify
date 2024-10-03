@@ -12,6 +12,7 @@ $name = $_POST['name'];
 $email = $_POST['email'];
 $password = $_POST['password'];
 $cpassword = $_POST['cpassword'];
+$captcha = $_POST['captcha'];
 
 $errors = [];
 if (!Validator::string($name, 5)) {
@@ -30,6 +31,10 @@ if ($password !== $cpassword) {
     $errors['cpassword'] = 'The password and confirmation password do not match.';
 }
 
+if ($captcha !== $_SESSION['captcha']['text']) {
+    $errors['captcha'] = 'The CAPTCHA you entered is incorrect. Please try again.';
+}
+
 $user = $db->query("select * from users where email=:email", ["email" => $email])->find();
 
 if ($user) {
@@ -39,11 +44,11 @@ if ($user) {
 if (!empty($errors)) {
     Session::flash('name',$name);
     Session::flash('email',$email);
+    Session::flash('errors',$errors);
 
-    return view("auth/signup.view.php", [
-        "title" => "Sign up",
-        "errors" => $errors
-    ]);
+    redirect("/signup");
+
+    (new \Core\Captcha)->generateCaptcha();
 }
 
 $db->query("INSERT INTO users (name, email, password) VALUES (:name, :email, :password);", [

@@ -1,2 +1,5 @@
 .env
 /vendor/
+/client/public/images/captcha/*
+!/client/public/images/captcha/.gitkeep
+
