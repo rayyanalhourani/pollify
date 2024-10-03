@@ -6,6 +6,7 @@ use \Core\Database;
 $id = $_GET["id"];
 $db = App::resolve(Database::class);
 
+//select polls and options with total number of votes
 $poll = $db->query("SELECT polls.*,users.name as owner from polls,users where polls.id=:id", [
     "id" => $id
 ])->find();

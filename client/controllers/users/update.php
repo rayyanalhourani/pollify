@@ -3,6 +3,7 @@
 use \Core\App;
 use \Core\Database;
 use \Core\Validator;
+use \Core\Session;
 
 $db = App::resolve(Database::class);
 
@@ -38,10 +39,8 @@ if ($user && ($email != $originalEmail)) {
 }
 
 if (!empty($errors)) {
-    return view("users/edit.view.php", [
-        "title" => "Edit",
-        "errors" => $errors
-    ]);
+    Session::flash("errors", $errors);
+    redirect("/users/edit?id=$id");
 }
 
 $updateQuery = "UPDATE users SET name = :name, email = :email, role = :role";

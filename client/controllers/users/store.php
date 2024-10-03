@@ -1,6 +1,5 @@
 <?php
 
-use Core\Authenticator;
 use \Core\Validator;
 use \Core\App;
 use \Core\Database;
@@ -40,12 +39,10 @@ if ($user) {
 if (!empty($errors)) {
     Session::flash("name",$name);
     Session::flash("email",$email);
-    Session::flash("role",$role);
+    Session::flash("role", $role);
+    Session::flash("errors", $errors);
 
-    return view("users/create.view.php", [
-        "title" => "Create user",
-        "errors" => $errors
-    ]);
+    redirect("/users/create");
 }
 
 $db->query("INSERT INTO users (name, email, password,role) VALUES (:name, :email, :password,:role);", [

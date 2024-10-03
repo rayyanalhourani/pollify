@@ -27,7 +27,7 @@ $router->get('/voting', 'voting/index.php')->only(["auth"]);
 $router->get('/voting/vote', 'voting/show.php')->only(["auth"]);
 $router->post('/voting/vote', 'voting/store.php')->only(["auth"]);
 
-//polls
+//useres
 $router->get('/users', 'users/index.php')->only(["auth", "admin"]);
 $router->get('/users/create', 'users/create.php')->only(["auth", "admin"]);
 $router->get('/users/edit', 'users/edit.php')->only(["auth", "admin"]);

@@ -35,16 +35,14 @@ if (empty($options) or in_array("", $options)) {
 }
 
 if (!empty($errors)) {
-    Session::flash("title",$title);
-    Session::flash("description",$description);
-    Session::flash("start_time",$start_time);
-    Session::flash("end_time",$end_time);
-    Session::flash("options",$options);
+    Session::flash("title", $title);
+    Session::flash("description", $description);
+    Session::flash("start_time", $start_time);
+    Session::flash("end_time", $end_time);
+    Session::flash("options", $options);
+    Session::flash("errors", $errors);
 
-    return view("polls/create.view.php", [
-        "title" => "Create poll",
-        "errors" => $errors
-    ]);
+    redirect("polls/create");
 }
 
 $db = App::resolve(Database::class);

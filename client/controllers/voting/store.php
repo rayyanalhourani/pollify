@@ -2,6 +2,7 @@
 
 use \Core\App;
 use \Core\Database;
+use Core\Session;
 
 function vote($db, $poll_id, $option_id)
 {
@@ -18,6 +19,7 @@ $db = App::resolve(Database::class);
 $poll_id = $_POST['poll_id'];
 $option_id = $_POST['option'] ?? null;
 
+//check if the poll ended or not
 $selectQuery = "SELECT * from polls where  = :id";
 $poll = $db->query($selectQuery, ["id" => $poll_id])->find();
 
@@ -29,8 +31,9 @@ $poll = $db->query($selectQuery, ["id" => $poll_id])->find();
 
 if ($poll && $poll['end_time'] <= $currentDateTime) {
     return;
-} 
+}
 
+//get the user submit a empty choise or submit a choosen choise before
 $selectQuery = "SELECT * from votes where poll_id = :poll_id and voter_id=:voter_id;";
 $vote = $db->query($selectQuery, ["poll_id" => $poll_id, "voter_id" => $_SESSION["user"]["id"]])->find();
 
@@ -41,37 +44,17 @@ if (!$_POST['option']) {
 }
 
 if ($error != null) {
-    $poll = $db->query("SELECT polls.*,users.name as owner from polls,users where polls.id=:id", [
-        "id" => $id
-    ])->find();
-
-    $getOptions = "SELECT * from options WHERE poll_id=:id";
-    $options = $db->query($getOptions, ["id" => $id])->get();
-
-    $userVoteQuery = "SELECT * from votes where poll_id = :poll_id and voter_id=:voter_id;";
-    $vottedOption = $db->query($userVoteQuery, [
-        "poll_id" => $id,
-        "voter_id" => $_SESSION["user"]["id"]
-    ])->find();
-
-    view("/voting/show.view.php", [
-        "title" => "Vote",
-        "poll" => $poll,
-        "options" => $options,
-        "vottedOption" => $vottedOption["option_id"] ?? null,
-        "error" => $error,
-    ]);
-    exit();
+    Session::flash('error', $error);
+    redirect("/voting");
 }
 
-if ($vote) {
-    if ($vote['option_id'] != $option_id) {
-        $deleteQuery = "DELETE FROM votes WHERE id = :id;";
-        $db->query($deleteQuery, ["id" => $vote['id']]);
-        vote($db, $poll_id, $option_id);
-    }
-} else {
-    vote($db, $poll_id, $option_id);
+//remove old vote when change the vote
+if ($vote && $vote['option_id'] != $option_id) {
+    $deleteQuery = "DELETE FROM votes WHERE id = :id;";
+    $db->query($deleteQuery, ["id" => $vote['id']]);
 }
+//add new vote
+vote($db, $poll_id, $option_id);
+
 
 redirect("/voting");

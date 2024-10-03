@@ -8,6 +8,7 @@ $db = App::resolve(Database::class);
 
 $currentDateTime = date('Y-m-d H:i:s');
 
+//show all polls
 $polls = $db->query("
     SELECT polls.*, 
            (SELECT COUNT(*) FROM votes WHERE votes.poll_id = polls.id) AS voting_count 

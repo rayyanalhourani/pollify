@@ -2,7 +2,7 @@
 
 use \Core\App;
 use \Core\Database;
-use \Core\Validator;
+use \Core\Session;
 
 $db = App::resolve(Database::class);
 
@@ -15,4 +15,5 @@ $user = $db->query("SELECT * from users where id=:id", [
 view("/users/edit.view.php", [
     'heading' => 'Edit user',
     'user' => $user,
+    "errors"=>Session::get("errors")
 ]);
