@@ -2,6 +2,7 @@
 
 use \Core\App;
 use \Core\Database;
+use Core\Session;
 use \Core\Validator;
 
 $id = $_POST["id"];
@@ -38,15 +39,9 @@ if (empty($options) or in_array("", $options)) {
 }
 
 if (!empty($errors)) {
-    $db = App::resolve(Database::class);
-    $poll = $db->query("SELECT * from polls where id=:id", ["id" => $id])->findOrFail();
-    $options = $db->query("SELECT * from options where poll_id=:id", ["id" => $id])->get();
-    return view("polls/edit.view.php", [
-        "title" => "Edit poll",
-        "errors" => $errors,
-        "poll" => $poll,
-        "options" => $options
-    ]);
+    Session::flash("errors", $errors);
+
+    redirect("/polls/edit?id=$id");
 }
 
 $db = App::resolve(Database::class);

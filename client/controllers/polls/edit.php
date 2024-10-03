@@ -2,6 +2,7 @@
 
 use \Core\App;
 use \Core\Database;
+use Core\Session;
 
 $id = $_GET["id"];
 $db = App::resolve(Database::class);
@@ -17,5 +18,5 @@ $options = $db->query("SELECT * from options where poll_id=:id", [
 view("/polls/edit.view.php", [
     'heading' => 'Edit Poll',
     'poll' => $poll,
-    'options' => $options
+    'errors'=>Session::get("errors"),
 ]);
