@@ -1,11 +1,11 @@
 <?php
 
 // Database connection details
-$host = 'localhost';  // Database host
-$db = 'pollify';    // Database name
-$user = 'root';       // Database username
-$pass = '123456';           // Database password
-$charset = 'utf8mb4'; // Charset
+$host = '';  // Database host
+$db = '';    // Database name
+$user = '';       // Database username
+$pass = '';           // Database password
+$charset = ''; // Charset
 
 // WebSocket server details
 $server_host = '127.0.0.1';  // WebSocket server host
